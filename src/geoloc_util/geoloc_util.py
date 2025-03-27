@@ -39,6 +39,10 @@ class GeoLocator:
                     "lon": data["lon"],
                     "country": data.get("country")
                 })
+            else:
+                results.append({
+                    "result": f"Geo location info not found for {location}"
+                })
         return results
 
 if __name__ == "__main__":

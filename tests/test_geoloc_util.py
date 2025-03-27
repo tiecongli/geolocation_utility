@@ -32,13 +32,13 @@ def test_happypath_mix_place_state_zip(test_data):
 
 def test_invalid_place_state():
     actual = GeoLocator.fetch_geolocation(["Santa Clara, wa"])
-    expected = []
+    expected = [{"result": "Geo location info not found for Santa Clara, wa"}]
     assert actual == expected
     
 def test_invalid_zip():
     with pytest.raises(requests.exceptions.HTTPError) as ex_info:
         GeoLocator.fetch_geolocation(["99999"])    
-    assert "404" in str(ex_info.value)
+    assert "Not Found" in str(ex_info.value)
 
 def test_e2e_happypath_place_state(test_data, app_path):
     app = os.path.abspath(app_path)
@@ -107,3 +107,15 @@ def test_e2e_invalid_args_zip_format(app_path):
     result = subprocess.run([app, "--locations", "89054945894"], capture_output=True, text=True)
     assert result.returncode == 1
     assert "Invalid location format" in result.stderr
+
+def test_e2e_zip_not_found(app_path):
+    app = os.path.abspath(app_path)
+    result = subprocess.run([app, "--locations", "99999"], capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "Not Found" in result.stdout
+
+def test_e2e_zip_city_state_not_found(app_path):
+    app = os.path.abspath(app_path)
+    result = subprocess.run([app, "--locations", "Shanghai, tx"], capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "Geo location info not found for Shanghai,tx" in result.stdout
