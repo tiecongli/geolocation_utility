@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "fetch_take_home"
+version = "0.1.0"
+description = "A takehome exercise project that fetch geolocation using API"
+authors = ["Tiecong Li tiecongli@gmail.com"]
+packages = [{include = "geoloc_util", from = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.14"
+requests = "^2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4"  # Updated to include pytest
+pyinstaller = "^6.12.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+geoloc = "geoloc_util.geoloc_util:main"
